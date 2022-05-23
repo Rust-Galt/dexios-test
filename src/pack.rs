@@ -35,6 +35,7 @@ pub fn encrypt_directory(
     let options = FileOptions::default()
         .compression_method(zip::CompressionMethod::Bzip2)
         .compression_level(Some(6)) // this is the default anyway
+        .large_file(true) // enables support of files >4Gb at a small size penalty
         .unix_permissions(0o755);
 
     zip.add_directory(input, options)
@@ -107,10 +108,10 @@ pub fn encrypt_directory(
 }
 
 pub fn decrypt_directory(
-    input: &str,        // encrypted zip file
-    output: &str,       // directory
-    keyfile: &str,      // for decrypt function
-    memory: bool,       // memory or stream mode
+    input: &str,         // encrypted zip file
+    output: &str,        // directory
+    keyfile: &str,       // for decrypt function
+    memory: bool,        // memory or stream mode
     params: &Parameters, // params for decrypt function
 ) -> Result<()> {
     let random_extension: String = Alphanumeric.sample_string(&mut rand::thread_rng(), 8);
